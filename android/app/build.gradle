@@ -60,6 +60,25 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "default"
+    productFlavors {
+        production {
+            dimension "default"
+            resValue "string", "my_camera", "Flavor Example"
+            applicationIdSuffix ""
+        }
+        staging {
+            dimension "default"
+            resValue "string", "my_camera", "Stg Flavor Example"
+            applicationIdSuffix ".stg"
+        }
+        development {
+            dimension "default"
+            resValue "string", "my_camera", "Dev Flavor Example"
+            applicationIdSuffix ".dev"
+        }
+    }
 }
 
 flutter {
