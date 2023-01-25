@@ -20,7 +20,7 @@ class _AppState extends State<App> {
     super.initState();
     _controller = CameraController(
       widget.camera,
-      ResolutionPreset.medium,
+      ResolutionPreset.high,
     );
 
     _initializeControllerFuture = _controller.initialize();
