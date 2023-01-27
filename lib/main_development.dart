@@ -3,10 +3,5 @@ import 'package:camera/camera.dart';
 import 'package:my_camera/app.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  final cameras = await availableCameras();
-  final firstCamera = cameras.first;
-
-  runApp(App(flavor: 'Development', camera: firstCamera));
+  runApp(App(flavor: 'Development'));
 }

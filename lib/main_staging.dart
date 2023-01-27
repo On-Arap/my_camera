@@ -8,5 +8,5 @@ void main() async {
   final cameras = await availableCameras();
   final firstCamera = cameras.first;
 
-  runApp(App(flavor: 'Staging', camera: firstCamera));
+  runApp(App(flavor: 'Staging'));
 }

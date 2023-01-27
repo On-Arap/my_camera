@@ -1,29 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   final String flavor;
-  final CameraDescription camera;
-
-  const App({super.key, required this.flavor, required this.camera});
+  App({super.key, required this.flavor});
 
   @override
-  State<App> createState() => _AppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(home: MyHome(flavor: flavor));
+  }
 }
 
-class _AppState extends State<App> {
+class MyHome extends StatefulWidget {
+  final String flavor;
+  const MyHome({super.key, required this.flavor});
+
+  @override
+  State<MyHome> createState() => _MyHomeState();
+}
+
+class _MyHomeState extends State<MyHome> {
   late CameraController _controller;
-  late Future<void> _initializeControllerFuture;
+
+  Future<void> _setupCameras() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    final cameras = await availableCameras();
+    final camera = cameras.first;
+
+    _controller = CameraController(
+      camera,
+      ResolutionPreset.high,
+    );
+  }
 
   @override
   void initState() {
-    super.initState();
-    _controller = CameraController(
-      widget.camera,
-      ResolutionPreset.high,
-    );
+    _setupCameras();
 
-    _initializeControllerFuture = _controller.initialize();
+    super.initState();
   }
 
   @override
@@ -40,7 +55,7 @@ class _AppState extends State<App> {
       home: Scaffold(
         appBar: AppBar(title: const Text('Take a picture')),
         body: FutureBuilder<void>(
-          future: _initializeControllerFuture,
+          future: _controller.initialize(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return CameraPreview(_controller);
@@ -52,9 +67,10 @@ class _AppState extends State<App> {
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             try {
-              await _initializeControllerFuture;
               final image = await _controller.takePicture();
+              print("if mounted");
               if (!mounted) return;
+              print("mounted");
               await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => DisplayPictureScreen(
@@ -80,6 +96,7 @@ class DisplayPictureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("IMAGE");
     return Scaffold(
       appBar: AppBar(title: const Text('Display the Picture')),
       body: const Center(
