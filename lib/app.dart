@@ -32,6 +32,7 @@ class _MyHomeState extends State<MyHome> {
       camera,
       ResolutionPreset.high,
     );
+    _controller.setFlashMode(FlashMode.off);
   }
 
   @override
