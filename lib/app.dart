@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'dart:io';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_picker/image_picker.dart';
 
 class App extends StatelessWidget {
   final String flavor;
+
   App({super.key, required this.flavor});
 
   @override
@@ -20,24 +24,30 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
-  late CameraController _controller;
+  List<CameraDescription>? cameras; //list out the camera available
+  CameraController? controller; //controller for camera
+  XFile? image; //for captured image
 
-  Future<void> _setupCameras() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  setupCameras() async {
+    cameras = await availableCameras();
+    if (cameras != null) {
+      controller = CameraController(cameras![0], ResolutionPreset.ultraHigh);
 
-    final cameras = await availableCameras();
-    final camera = cameras.first;
-
-    _controller = CameraController(
-      camera,
-      ResolutionPreset.high,
-    );
-    _controller.setFlashMode(FlashMode.off);
+      controller!.setFlashMode(FlashMode.off);
+      controller!.initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
+      });
+    } else {
+      print("NO any camera found");
+    }
   }
 
   @override
   void initState() {
-    _setupCameras();
+    setupCameras();
 
     super.initState();
   }
@@ -45,7 +55,7 @@ class _MyHomeState extends State<MyHome> {
   @override
   void dispose() {
     // Dispose of the controller when the widget is disposed.
-    _controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -55,27 +65,24 @@ class _MyHomeState extends State<MyHome> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(title: const Text('Take a picture')),
-        body: FutureBuilder<void>(
-          future: _controller.initialize(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return CameraPreview(_controller);
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
+        body: Container(
+          child: controller == null
+              ? const Center(child: Text("Loading Camera..."))
+              : !controller!.value.isInitialized
+                  ? const Center(child: CircularProgressIndicator())
+                  : CameraPreview(controller!),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             try {
-              final image = await _controller.takePicture();
+              final image = await controller!.takePicture();
               print("if mounted");
               if (!mounted) return;
               print("mounted");
               await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => DisplayPictureScreen(
-                    imagePath: image.path,
+                    image: image,
                   ),
                 ),
               );
@@ -90,21 +97,29 @@ class _MyHomeState extends State<MyHome> {
   }
 }
 
-class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
+class DisplayPictureScreen extends StatefulWidget {
+  final XFile image;
 
-  const DisplayPictureScreen({super.key, required this.imagePath});
+  const DisplayPictureScreen({super.key, required this.image});
+
+  @override
+  State<DisplayPictureScreen> createState() => _DisplayPictureScreenState();
+}
+
+class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
+  String buttonText = "Save Image";
 
   @override
   Widget build(BuildContext context) {
-    print("IMAGE");
     return Scaffold(
       appBar: AppBar(title: const Text('Display the Picture')),
-      body: const Center(
-          child: Text(
-        "image",
-      )),
-      // body: Image.file(File(path: imagePath)),
+      //body: const Center(child: Text("image")),
+      body: Column(
+        children: [
+          TextButton(onPressed: () => GallerySaver.saveImage(widget.image.path, albumName: "Squared"), child: Text(buttonText)),
+          Image.file(File(widget.image.path)),
+        ],
+      ),
     );
   }
 }
