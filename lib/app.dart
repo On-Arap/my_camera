@@ -31,14 +31,19 @@ class _MyHomeState extends State<MyHome> {
   setupCameras() async {
     cameras = await availableCameras();
     if (cameras != null) {
-      controller = CameraController(cameras![0], ResolutionPreset.ultraHigh);
+      controller = CameraController(
+        cameras![0],
+        ResolutionPreset.ultraHigh,
+      );
 
-      controller!.setFlashMode(FlashMode.off);
       controller!.initialize().then((_) {
         if (!mounted) {
           return;
         }
-        setState(() {});
+        setState(() {
+          controller!.setFlashMode(FlashMode.off);
+          controller!.setZoomLevel(1.1);
+        });
       });
     } else {
       print("NO any camera found");
@@ -66,12 +71,25 @@ class _MyHomeState extends State<MyHome> {
       home: Scaffold(
         appBar: AppBar(title: const Text('Take a picture')),
         body: Container(
-          child: controller == null
-              ? const Center(child: Text("Loading Camera..."))
-              : !controller!.value.isInitialized
-                  ? const Center(child: CircularProgressIndicator())
-                  : CameraPreview(controller!),
-        ),
+            child: controller == null
+                ? const Center(child: Text("Loading Camera..."))
+                : !controller!.value.isInitialized
+                    ? const Center(child: CircularProgressIndicator())
+                    : AspectRatio(
+                        aspectRatio: 1 / 1,
+                        child: ClipRect(
+                          child: Transform.scale(
+                            scale: controller!.value.aspectRatio / 1,
+                            child: Center(
+                              child: CameraPreview(controller!),
+                            ),
+                          ),
+                        ),
+                      )
+            // CameraPreview(
+            //                     controller!,
+            //                   ),
+            ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             try {
@@ -117,7 +135,12 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       body: Column(
         children: [
           TextButton(onPressed: () => GallerySaver.saveImage(widget.image.path, albumName: "Squared"), child: Text(buttonText)),
-          Image.file(File(widget.image.path)),
+          Image.file(
+            File(widget.image.path),
+            fit: BoxFit.fitWidth,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width,
+          ),
         ],
       ),
     );
