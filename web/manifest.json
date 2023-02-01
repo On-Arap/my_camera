@@ -1,6 +1,6 @@
 {
-    "name": "my_camera",
-    "short_name": "my_camera",
+    "name": "squared",
+    "short_name": "squared",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,4 +1,4 @@
-package com.example.my_camera
+package com.example.squared
 
 import io.flutter.embedding.android.FlutterActivity
 

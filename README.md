@@ -1,4 +1,4 @@
-# my_camera
+# squared
 
 A new Flutter project.
 

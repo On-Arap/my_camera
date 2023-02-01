@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:my_camera/screens/display_photo.dart';
+import 'package:squared/screens/display_photo.dart';
 
 class PreviewCam extends StatefulWidget {
   final String flavor;

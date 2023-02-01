@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.my_camera">
+    package="com.example.squared">
    <application
-        android:label="@string/my_camera"
+        android:label="@string/squared"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
