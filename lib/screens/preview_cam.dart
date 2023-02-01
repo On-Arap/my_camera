@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:my_camera/screens/displayPhoto.dart';
+import 'package:my_camera/screens/display_photo.dart';
 
-class previewCam extends StatefulWidget {
+class PreviewCam extends StatefulWidget {
   final String flavor;
-  const previewCam({super.key, required this.flavor});
+  const PreviewCam({super.key, required this.flavor});
 
   @override
-  State<previewCam> createState() => _previewCamState();
+  State<PreviewCam> createState() => _PreviewCamState();
 }
 
-class _previewCamState extends State<previewCam> {
+class _PreviewCamState extends State<PreviewCam> {
   List<CameraDescription>? cameras; //list out the camera available
   CameraController? controller; //controller for camera
   XFile? image; //for captured image

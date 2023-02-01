@@ -23,13 +23,35 @@ class _DisplayPhotoState extends State<DisplayPhoto> {
       //body: const Center(child: Text("image")),
       body: Column(
         children: [
-          TextButton(onPressed: () => GallerySaver.saveImage(widget.image.path, albumName: "Squared"), child: Text(buttonText)),
+          const SizedBox(
+            height: 150,
+          ),
           Image.file(
             File(widget.image.path),
             fit: BoxFit.fitWidth,
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
           ),
+          SizedBox(
+            height: 150,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButton(
+                  onPressed: () {
+                    if (buttonText == "Save Image") {
+                      GallerySaver.saveImage(widget.image.path, albumName: "Squared").then((value) {
+                        setState(() {
+                          buttonText = "Image saved";
+                        });
+                      });
+                    }
+                  },
+                  child: Padding(padding: const EdgeInsets.all(10.0), child: Text(buttonText)),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
