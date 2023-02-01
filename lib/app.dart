@@ -11,7 +11,13 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: MyHome(flavor: flavor));
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          visualDensity: VisualDensity.comfortable,
+        ),
+        home: MyHome(flavor: flavor));
   }
 }
 
@@ -66,79 +72,72 @@ class _MyHomeState extends State<MyHome> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        visualDensity: VisualDensity.comfortable,
-      ),
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Take a picture')),
-        body: Column(
-          children: [
-            const SizedBox(
-              height: 150,
-            ),
-            Expanded(
-              child: Container(
-                  child: controller == null
-                      ? const Center(child: Text("Loading Camera..."))
-                      : !controller!.value.isInitialized
-                          ? const Center(child: CircularProgressIndicator())
-                          : Center(
-                              child: AspectRatio(
-                              aspectRatio: 1 / 1,
-                              child: ClipRect(
-                                child: Transform.scale(
-                                  scale: controller!.value.aspectRatio / 1,
-                                  child: Center(
-                                    child: CameraPreview(controller!),
-                                  ),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Take a picture')),
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 150,
+          ),
+          Expanded(
+            child: Container(
+                child: controller == null
+                    ? const Center(child: Text("Loading Camera..."))
+                    : !controller!.value.isInitialized
+                        ? const Center(child: CircularProgressIndicator())
+                        : Center(
+                            child: AspectRatio(
+                            aspectRatio: 1 / 1,
+                            child: ClipRect(
+                              child: Transform.scale(
+                                scale: controller!.value.aspectRatio / 1,
+                                child: Center(
+                                  child: CameraPreview(controller!),
                                 ),
                               ),
-                            ))
-                  // CameraPreview(
-                  //                     controller!,
-                  //                   ),
-                  ),
-            ),
-            SizedBox(
-              height: 150,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  OutlinedButton(
-                    onPressed: () async {
-                      try {
-                        final image = await controller!.takePicture();
-                        print("if mounted");
-                        if (!mounted) return;
-                        print("mounted");
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => DisplayPictureScreen(
-                              image: image,
                             ),
+                          ))
+                // CameraPreview(
+                //                     controller!,
+                //                   ),
+                ),
+          ),
+          SizedBox(
+            height: 150,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                OutlinedButton(
+                  onPressed: () async {
+                    try {
+                      final image = await controller!.takePicture();
+                      print("if mounted");
+                      if (!mounted) return;
+                      print("mounted");
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DisplayPictureScreen(
+                            image: image,
                           ),
-                        );
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Icon(
-                        Icons.camera_alt,
-                        size: 40,
-                      ),
+                        ),
+                      );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Icon(
+                      Icons.camera_alt,
+                      size: 40,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
