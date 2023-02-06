@@ -38,6 +38,9 @@ class _DisplayPhotoState extends State<DisplayPhoto> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 OutlinedButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all<Color>(Colors.amber),
+                  ),
                   onPressed: () {
                     if (buttonText == "Save Image") {
                       GallerySaver.saveImage(widget.image.path, albumName: "Squared").then((value) {
