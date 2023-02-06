@@ -90,6 +90,9 @@ class _PreviewCamState extends State<PreviewCam> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 OutlinedButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all<Color>(Colors.amber),
+                  ),
                   onPressed: () async {
                     try {
                       final image = await controller!.takePicture();
