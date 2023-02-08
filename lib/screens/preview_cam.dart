@@ -57,9 +57,9 @@ class _PreviewCamState extends State<PreviewCam> {
       appBar: AppBar(title: const Text('Take a picture')),
       body: Column(
         children: [
-          const SizedBox(
-            height: 150,
-          ),
+          // const SizedBox(
+          //   height: 150,
+          // ),
           Expanded(
             child: Container(
                 child: controller == null
@@ -67,17 +67,18 @@ class _PreviewCamState extends State<PreviewCam> {
                     : !controller!.value.isInitialized
                         ? const Center(child: CircularProgressIndicator())
                         : Center(
-                            child: AspectRatio(
-                            aspectRatio: 1 / 1,
-                            child: ClipRect(
-                              child: Transform.scale(
-                                scale: controller!.value.aspectRatio / 1,
-                                child: Center(
-                                  child: CameraPreview(controller!),
-                                ),
-                              ),
-                            ),
-                          ))
+                            // child: AspectRatio(
+                            // aspectRatio: 1 / 1,
+                            // child: ClipRect(
+                            //   child: Transform.scale(
+                            //     scale: controller!.value.aspectRatio / 1,
+                            //     child: Center(
+                            child: CameraPreview(controller!),
+                            //     ),
+                            //   ),
+                            // ),
+                            // )
+                          )
                 // CameraPreview(
                 //                     controller!,
                 //                   ),
