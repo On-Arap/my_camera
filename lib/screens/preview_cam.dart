@@ -99,6 +99,18 @@ class _PreviewCamState extends State<PreviewCam> {
                       print("if mounted");
                       if (!mounted) return;
                       print("mounted");
+
+                      // final croppedImage = await ImageCropper().cropImage(
+                      //   sourcePath: image.path,
+                      //   maxWidth: 1080,
+                      //   maxHeight: 1080,
+                      // );
+                      // File imagePreview = File(image.path);
+                      // if (croppedImage != null) {
+                      //   imagePreview = File(croppedImage.path);
+                      //   setState(() {});
+                      // }
+
                       await Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => DisplayPhoto(

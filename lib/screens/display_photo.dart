@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'dart:io';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class DisplayPhoto extends StatefulWidget {
   final XFile image;
@@ -15,6 +16,26 @@ class DisplayPhoto extends StatefulWidget {
 
 class _DisplayPhotoState extends State<DisplayPhoto> {
   String buttonText = "Save Image";
+  late File imagePreview;
+
+  _cropImage() async {
+    final croppedImage = await ImageCropper().cropImage(
+      sourcePath: widget.image.path,
+      maxWidth: 1080,
+      maxHeight: 1080,
+    );
+    if (croppedImage != null) {
+      imagePreview = File(croppedImage.path);
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    imagePreview = File(widget.image.path);
+    _cropImage();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +47,19 @@ class _DisplayPhotoState extends State<DisplayPhoto> {
           const SizedBox(
             height: 150,
           ),
-          Image.file(
-            File(widget.image.path),
-            fit: BoxFit.fitWidth,
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width,
-          ),
+          imagePreview == null
+              ? Image.file(
+                  File(widget.image.path),
+                  fit: BoxFit.fitWidth,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width,
+                )
+              : Image.file(
+                  File(imagePreview.path),
+                  fit: BoxFit.fitWidth,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width,
+                ),
           SizedBox(
             height: 150,
             child: Row(
