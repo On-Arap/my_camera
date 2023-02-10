@@ -14,12 +14,13 @@ class _PreviewCamState extends State<PreviewCam> {
   List<CameraDescription>? cameras; //list out the camera available
   CameraController? controller; //controller for camera
   XFile? image; //for captured image
+  int cameraId = 0;
 
   setupCameras() async {
     cameras = await availableCameras();
     if (cameras != null) {
       controller = CameraController(
-        cameras![0],
+        cameras![cameraId],
         ResolutionPreset.ultraHigh,
       );
 
@@ -29,7 +30,30 @@ class _PreviewCamState extends State<PreviewCam> {
         }
         setState(() {
           controller!.setFlashMode(FlashMode.off);
-          controller!.setZoomLevel(1.1);
+          controller!.setZoomLevel(1.0);
+        });
+      });
+    } else {
+      print("NO any camera found");
+    }
+  }
+
+  switchCameras() async {
+    cameraId = cameraId == 0 ? 1 : 0;
+
+    if (cameras != null) {
+      controller = CameraController(
+        cameras![cameraId],
+        ResolutionPreset.ultraHigh,
+      );
+
+      controller!.initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          controller!.setFlashMode(FlashMode.off);
+          controller!.setZoomLevel(1.0);
         });
       });
     } else {
@@ -87,8 +111,8 @@ class _PreviewCamState extends State<PreviewCam> {
           SizedBox(
             height: 150,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 OutlinedButton(
                   style: ButtonStyle(
@@ -97,9 +121,7 @@ class _PreviewCamState extends State<PreviewCam> {
                   onPressed: () async {
                     try {
                       final image = await controller!.takePicture();
-                      print("if mounted");
                       if (!mounted) return;
-                      print("mounted");
 
                       // final croppedImage = await ImageCropper().cropImage(
                       //   sourcePath: image.path,
@@ -127,6 +149,25 @@ class _PreviewCamState extends State<PreviewCam> {
                     padding: EdgeInsets.all(10.0),
                     child: Icon(
                       Icons.camera_alt,
+                      size: 40,
+                    ),
+                  ),
+                ),
+                OutlinedButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all<Color>(Colors.amber),
+                  ),
+                  onPressed: () async {
+                    try {
+                      switchCameras();
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Icon(
+                      Icons.switch_camera,
                       size: 40,
                     ),
                   ),
