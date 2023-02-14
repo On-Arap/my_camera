@@ -134,6 +134,25 @@ class _PreviewCamState extends State<PreviewCam> {
                   ),
                   onPressed: () async {
                     try {
+                      switchCameras();
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Icon(
+                      Icons.switch_camera,
+                      size: 20,
+                    ),
+                  ),
+                ),
+                OutlinedButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all<Color>(Colors.amber),
+                  ),
+                  onPressed: () async {
+                    try {
                       final image = await controller!.takePicture();
                       if (!mounted) return;
 
@@ -173,35 +192,16 @@ class _PreviewCamState extends State<PreviewCam> {
                   ),
                   onPressed: () async {
                     try {
-                      switchCameras();
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Icon(
-                      Icons.switch_camera,
-                      size: 40,
-                    ),
-                  ),
-                ),
-                OutlinedButton(
-                  style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all<Color>(Colors.amber),
-                  ),
-                  onPressed: () async {
-                    try {
                       switchFlash();
                     } catch (e) {
                       print(e);
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(5),
                     child: Icon(
                       isFlash == true ? Icons.flashlight_on : Icons.flashlight_off,
-                      size: 40,
+                      size: 20,
                     ),
                   ),
                 ),
