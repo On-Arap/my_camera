@@ -15,6 +15,7 @@ class _PreviewCamState extends State<PreviewCam> {
   CameraController? controller; //controller for camera
   XFile? image; //for captured image
   int cameraId = 0;
+  bool isFlash = false;
 
   setupCameras() async {
     cameras = await availableCameras();
@@ -36,6 +37,19 @@ class _PreviewCamState extends State<PreviewCam> {
     } else {
       print("NO any camera found");
     }
+  }
+
+  switchFlash() async {
+    if (isFlash) {
+      print(isFlash);
+      controller!.setFlashMode(FlashMode.off);
+    } else {
+      print(isFlash);
+      controller!.setFlashMode(FlashMode.torch);
+    }
+    setState(() {
+      isFlash = !isFlash;
+    });
   }
 
   switchCameras() async {
@@ -168,6 +182,25 @@ class _PreviewCamState extends State<PreviewCam> {
                     padding: EdgeInsets.all(10.0),
                     child: Icon(
                       Icons.switch_camera,
+                      size: 40,
+                    ),
+                  ),
+                ),
+                OutlinedButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all<Color>(Colors.amber),
+                  ),
+                  onPressed: () async {
+                    try {
+                      switchFlash();
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Icon(
+                      isFlash == true ? Icons.flashlight_on : Icons.flashlight_off,
                       size: 40,
                     ),
                   ),
