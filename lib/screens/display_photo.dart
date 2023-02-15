@@ -50,15 +50,9 @@ class _DisplayPhotoState extends State<DisplayPhoto> {
           imagePreview == null
               ? Image.file(
                   File(widget.image.path),
-                  fit: BoxFit.fitWidth,
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width,
                 )
               : Image.file(
                   File(imagePreview.path),
-                  fit: BoxFit.fitWidth,
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width,
                 ),
           SizedBox(
             height: 150,
