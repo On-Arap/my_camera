@@ -139,10 +139,11 @@ class _PreviewCamState extends State<PreviewCam> {
                       print(e);
                     }
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.all(5.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
                     child: Icon(
                       Icons.switch_camera,
+                      color: Colors.amber[800],
                       size: 20,
                     ),
                   ),
@@ -178,10 +179,11 @@ class _PreviewCamState extends State<PreviewCam> {
                       print(e);
                     }
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.all(10.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
                     child: Icon(
                       Icons.camera_alt,
+                      color: Colors.amber[800],
                       size: 40,
                     ),
                   ),
@@ -201,6 +203,7 @@ class _PreviewCamState extends State<PreviewCam> {
                     padding: const EdgeInsets.all(5),
                     child: Icon(
                       isFlash == true ? Icons.flashlight_on : Icons.flashlight_off,
+                      color: Colors.amber[800],
                       size: 20,
                     ),
                   ),
